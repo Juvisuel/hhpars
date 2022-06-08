@@ -1,12 +1,17 @@
+# делаем красивый график кубиками из данных, в первом случае по всей таблице
+# во втором случае с выборкой по топ платящих
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import squarify
+import functions
 
-data_skills_top = pd.read_csv('F:\learn_neuro\hhpars\data/data_for_sort.csv')
-data_bounty_skills = pd.read_csv('F:\learn_neuro\hhpars\data/data_skills_bounty.csv')
 data_vacancies = pd.read_csv('F:\learn_neuro\hhpars\data/data_vacancies1.csv')
-max_bounty = list(data_vacancies.sort_values('from', ascending=False)['id'])
+data_skills = pd.read_csv('F:\learn_neuro\hhpars\data/data_skills_1.csv')
+data_skills = data_skills.drop(['Unnamed: 0.1','Unnamed: 0'], axis=1)
 
+
+# max_bounty = list(data_vacancies.sort_values('from', ascending=False)['id'])
 # list_bounty = []
 # for n in range(data_vacancies.shape[0]//100):
 #     temp_list = max_bounty[n*100:(n+1)*100]
@@ -43,30 +48,38 @@ max_bounty = list(data_vacancies.sort_values('from', ascending=False)['id'])
 
 
 
-# по второй таблице
-df = pd.DataFrame()
-df['Unnamed: 0'] = data_bounty_skills['Unnamed: 0']
+# по второй таблице - циклом (
 
-for n in range(9):
+name = 'питон'
+
+cut = 3  # на сколько частей хотим разделить полученную базу
+top = 1   # какую часть из нее хотим смотреть (если top = cut, то все)
+percentil = round(100/cut*top)
+
+temp_data_bounty_skills = functions.data_skills_bounty_make(cut,top,data_vacancies,data_skills)
+print(temp_data_bounty_skills)
+
+for n in range(0,top):
     df = pd.DataFrame()
-    df['Unnamed: 0'] = data_bounty_skills['Unnamed: 0']
-    df[str(n)] = data_bounty_skills[str(n)]
+    df.index = temp_data_bounty_skills.index
+    print(df, n)
+    df[n] = temp_data_bounty_skills[n]
+    print(df, n)
 
-    df = df.loc[df[str(n)] != 0 ]
+    df = df.loc[df[n] != 0]
 
     print(df)
 
-    labels = list(df['Unnamed: 0'])
-    sizes = list(df[str(n)])
+    labels = list(df.index)
+    sizes = list(df[n])
     colors = [plt.cm.Spectral(i/float(len(labels)+0.1)) for i in range(len(labels))]
 
     # Draw Plot
-    plt.figure(figsize=(35,20), dpi= 80)
+    plt.figure(figsize=(35, 20), dpi=80)
     squarify.plot(sizes=sizes, label=labels, color=colors, alpha=.8)
 
-
     # Decorate
-    plt.title(f'требования к программисту со знанием Python в вакансиях {n} ')
+    plt.title(f'требования в вакансиях топ-{percentil}% {name} ')
     plt.axis('off')
-    plt.savefig(f'F:\learn_neuro\hhpars\data/python_{n}.png')
-    # plt.show()
+    # plt.savefig(f'F:\learn_neuro\hhpars\data/python_{n}.png')
+    plt.show()

@@ -1,41 +1,32 @@
+# список скилов делаем
+
 import pandas as pd
 import pymorphy3
+import functions
 
 data_descriptions = pd.read_csv('F:\learn_neuro\hhpars\data/data_descriptions.csv')
 # print(data_descriptions)
 
-data_skills = pd.DataFrame()
-morph = pymorphy3.MorphAnalyzer()
 
-print(morph.normal_forms('близко'))
-
-for text in data_descriptions['requirement']:
-
-    text = text.replace('.', '').replace('/', ' ').replace('?', ' ').replace(
-        ',', ' ').replace('(', ' ').replace(')', ' ')
-    text = text.split()
-
-    for string_data in text:
-        choice = int(input(f' {string_data}   1 = да , 0 = нет, 3 = прекратить работу '))
-        name = str(string_data).lower()
-        try:
-            name = morph.normal_forms(name)
-            name = str(name[0])
-            print(name)
-        except:
-            name = str(name)
-        if choice == 1:
-
-            if name not in data_skills.columns:
-                data_skills[name] = 0
-            else:
-                print('этот скил уже есть')
+# # ручной выбор
+# for text in data_descriptions['requirement']:
+#     text = functions.text_clean(text)
+# data_skills.to_csv('F:\learn_neuro\hhpars\data/data_skills.csv')
 
 
-        elif choice == 3:
-            print(data_skills)
+# не делаю ранжирование силы требования, какой уровень нужен. пока только хотя бы сами требования собираю. можно
+# будет потом брать из самих вакансий окружение
+# автовыбор признаков в списки, пока что на базе урезанных дескрипшнов
 
-            break
+x = 200
 
-        # data_skills.to_csv('F:\learn_neuro\hhpars\data/data_skills.csv')
+for i in range(x, x+1):
+    text, full_list = functions.reparce_for_skills_listlist(data_descriptions, i, vision=1)
+    print(text)
+    # print(full_list)
 
+# TODO сделать внутри списочков разбор уже по финальным скилам и какое то складирование по подобным
+
+for text_block in full_list:
+    if text_block != []:
+        print(text_block[0])
