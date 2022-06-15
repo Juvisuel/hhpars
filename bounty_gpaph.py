@@ -9,6 +9,7 @@ import functions
 data_vacancies = pd.read_csv('F:\learn_neuro\hhpars\data/data_vacancies1.csv')
 data_skills = pd.read_csv('F:\learn_neuro\hhpars\data/data_skills_1.csv')
 data_skills = data_skills.drop(['Unnamed: 0.1','Unnamed: 0'], axis=1)
+print(data_skills)
 
 
 # max_bounty = list(data_vacancies.sort_values('from', ascending=False)['id'])

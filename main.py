@@ -1,9 +1,11 @@
 import pandas as pd
+import functions
 
 main_url = 'https://api.hh.ru/'
 position = 'python'
 
-data_descriptions = pd.read_csv('F:\learn_neuro\hhpars\data/data_descriptions.csv')
-print(data_descriptions)
+count = 1999
 
-temp_str =
+data_vacancies = functions.data_vacancies(main_url, position, count)
+data_descriptions, data_vacancies1 = functions.id_expanse(main_url, data_vacancies)
+

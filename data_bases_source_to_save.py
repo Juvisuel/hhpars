@@ -1,7 +1,7 @@
 # тащим с хх 2000 вакансий по ключевому слову и разбираем на две базы. в вакансиях более полный список,
 # в дескрипшнах только Id. должностные обязанности и требования, причем это все обрезано из сниппетаъ
 
-#TODO прикрутить забор полного резюме из базы?
+#TODO прикрутить забор полной вакансии из базы?
 
 import requests
 import pprint
@@ -37,9 +37,6 @@ data_vacancies = functions.data_vacancies(main_url, position, count)
 # print(data_vacancies.sort_values('from', ascending=False))
 
 data_descriptions, data_vacancies1 = functions.id_expanse(main_url, data_vacancies)
-
-print(data_vacancies1)
-print(data_descriptions)
 
 data_descriptions.to_csv('F:\learn_neuro\hhpars\data/data_descriptions.csv')
 data_vacancies1.to_csv('F:\learn_neuro\hhpars\data/data_vacancies1.csv')
