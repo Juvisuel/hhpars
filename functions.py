@@ -9,6 +9,9 @@ def generate_str_request(name, text, page):
     name_str = name + 'vacancies?&page=' + str(page) + '&text=' + text
     return name_str
 
+def generate_str_request(name, text, page):
+    name_str = name + 'resumes?&page=' + str(page) + '&text=' + text
+    return name_str
 
 # вакансия разбирается по значимым столбцам таблицы, функция. цикл берется из списка,
 # не совпадающего со столбцами таблицы, так как для двух из них мы берем только один из параметров
@@ -53,11 +56,35 @@ def data_vacancies(main_url, position, count):
 
     for page in range(count // 20):
         print(page)
-        temp_url = generate_str_request(main_url, position, page)
+        temp_url = generate_str_request_res(main_url, position, page)
         # print(temp_url)
         vacancies = requests.get(temp_url)
 
         for local_result in vacancies.json()['items']:
+            data_vacancies1 = parse_id(local_result, data_vacancies1, data_items)
+
+    return data_vacancies1
+
+
+
+def data_res(main_url, position, count):
+    data_items = ['name', 'snippet', 'id', 'alternate_url', 'area',
+                  'responsibility', 'salary', 'from', 'requirement', 'description']
+
+    list_columns_ultrashort = ['name', 'id', 'alternate_url', 'area',
+                               'responsibility', 'from', 'requirement', 'description']
+
+    data_vacancies1 = pd.DataFrame(columns=list_columns_ultrashort)
+
+    for page in range(count // 20):
+        print(page)
+        temp_url = generate_str_request(main_url, position, page)
+
+        items = requests.get(temp_url)
+        print(items)
+
+
+        for local_result in items.json()['items']:
             data_vacancies1 = parse_id(local_result, data_vacancies1, data_items)
 
     return data_vacancies1
