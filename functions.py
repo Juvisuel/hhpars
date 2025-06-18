@@ -56,7 +56,7 @@ def data_vacancies(main_url, position, count):
 
     for page in range(count // 20):
         print(page)
-        temp_url = generate_str_request_res(main_url, position, page)
+        temp_url = generate_str_request(main_url, position, page)
         # print(temp_url)
         vacancies = requests.get(temp_url)
 
